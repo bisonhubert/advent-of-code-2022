@@ -1,3 +1,5 @@
+from tests import run_star_test, run_unit_test
+
 INPUT_FILEPATH = './input_01.py'
 
 def get_inventory(filepath):
@@ -37,12 +39,13 @@ most_calories = top_x_most_calories(inventory_details, elf_count=1)
 top_3_most_calories = top_x_most_calories(inventory_details)
 
 # Tests
+
 # inventory is splitting correctly
-print('💚' if inventory[0] == [7769, 6798, 11685, 10826, 11807, 5786, 7932] else '❌')
+run_unit_test(inventory[0], [7769, 6798, 11685, 10826, 11807, 5786, 7932])
 # calorie totals returns the correct sum of the first inventory in the test above
-print('💚' if inventory_details[0] == 62603 else '❌')
+run_unit_test(inventory_details[0], 62603)
 # solution 1: Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?
-print('⭐️' if most_calories == 71780 else '❌') # first try 🙌
+run_star_test(most_calories, 71780) # first try 🙌
 # solution 2: Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
 # attempt_1 = 215340, too high
-print('⭐️' if top_3_most_calories == 212489 else '❌')
+run_star_test(top_3_most_calories, 212489)
