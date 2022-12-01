@@ -1,5 +1,3 @@
-import numpy as np
-
 INPUT_FILEPATH = './input_01.py'
 
 def get_inventory(filepath):
@@ -23,20 +21,20 @@ def get_inventory_details(inventory):
         inventory_details.append(sum(elf_inventory))
     return inventory_details
 
+def top_x_most_calories(inventory_details, elf_count=3):
+    top_3_most_calories = 0
+    inventory_details_copy = inventory_details[:]
+    for i in list(range(elf_count)):
+        max_calories = max(inventory_details_copy)
+        top_3_most_calories += max_calories
+        # print('top 3 most', top_3_most_calories)
+        inventory_details_copy.remove(max_calories)
+    return top_3_most_calories
 
 inventory = get_inventory(INPUT_FILEPATH)
 inventory_details = get_inventory_details(inventory)
-most_calories = max(inventory_details)
-
-elf_count = 3
-top_3_most_calories = 0
-inventory_details_copy = inventory_details[:]
-# import pdb;pdb.set_trace()
-for i in list(range(3)):
-    max_calories = max(inventory_details_copy)
-    top_3_most_calories += max_calories
-    # print('top 3 most', top_3_most_calories)
-    inventory_details_copy.remove(max_calories)
+most_calories = top_x_most_calories(inventory_details, elf_count=1)
+top_3_most_calories = top_x_most_calories(inventory_details)
 
 # Tests
 # inventory is splitting correctly
