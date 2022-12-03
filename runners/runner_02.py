@@ -1,7 +1,7 @@
 from random import sample
 from tests import run_star_test, run_unit_test
 
-INPUT_FILEPATH = './input_02.py'
+INPUT_FILEPATH = './inputs/input_02.py'
 
 class OpponentHand:
     ROCK = 'A'
@@ -124,6 +124,7 @@ game = Game(strategy_guide=strategy_guide, player_hand=player_hand, opponent_han
 # Test
 # solution 1: What would your total score be if everything goes exactly according to your strategy guide?
 # attempt 1: 10290, too low
+print('--')
 run_star_test(game.perfect_score, 12855)
 # solution 2: Following the Elf's instructions for the second column, what would your total score be if everything goes exactly according to your strategy guide?
 run_star_test(game.choreographed_score, 13726) # first try 🙌

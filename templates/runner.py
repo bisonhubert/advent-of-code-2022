@@ -5,7 +5,7 @@ from tests import run_star_test, run_unit_test
 
 def get_input_filepath(filename):
     day = filename.split('/')[-1].split('_')[-1].split('.')[0]
-    return f'./input_{day}.py'
+    return f'./inputs/input_{day}.py'
 
 def parse_input(filepath):
     # i/o
@@ -23,6 +23,7 @@ def get_input():
 input = get_input()
 
 # Stdout here
+print('--')
 print('input', input)
 
 # Tests

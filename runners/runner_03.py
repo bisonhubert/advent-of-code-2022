@@ -5,7 +5,7 @@ from tests import run_star_test, run_unit_test
 
 def get_input_filepath(filename):
     day = filename.split('/')[-1].split('_')[-1].split('.')[0]
-    return f'./input_{day}.txt'
+    return f'./inputs/input_{day}.txt'
 
 def parse_input(filepath):
     # ['PcPlnShm\n'] ->  ['PcPlnShm']
@@ -85,7 +85,7 @@ for indx, rucksack in enumerate(rucksacks):
     
 
 # Stdout here
-# print('input', solution_2)
+print('--')
 
 # Tests
 # solution 1: Find the item type that appears in both compartments of each rucksack. What is the sum of the priorities of those item types?
