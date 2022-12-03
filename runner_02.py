@@ -3,6 +3,16 @@ from tests import run_star_test, run_unit_test
 
 INPUT_FILEPATH = './input_02.py'
 
+class OpponentHand:
+    ROCK = 'A'
+    PAPER = 'B'
+    SCISSORS = 'C'
+
+class PlayerHand:
+    ROCK = 'X' # 1pt
+    PAPER = 'Y' # 2pts
+    SCISSORS = 'Z' # 3pts
+
 SCORE_MAP = {
     "X": 1,
     "Y": 2,
@@ -18,15 +28,17 @@ SCORE_MAP = {
     OpponentHand.PAPER+PlayerHand.ROCK: 0,
 }
 
-class OpponentHand:
-    ROCK = 'A'
-    PAPER = 'B'
-    SCISSORS = 'C'
-
-class PlayerHand:
-    ROCK = 'X' # 1pt
-    PAPER = 'Y' # 2pts
-    SCISSORS = 'Z' # 3pts
+PLAYER_SIGNAL_MAP = { 
+    PlayerHand.ROCK+OpponentHand.ROCK: PlayerHand.SCISSORS,
+    PlayerHand.ROCK+OpponentHand.PAPER: PlayerHand.ROCK,
+    PlayerHand.ROCK+OpponentHand.SCISSORS: PlayerHand.PAPER,
+    PlayerHand.PAPER+OpponentHand.ROCK: PlayerHand.ROCK,
+    PlayerHand.PAPER+OpponentHand.PAPER: PlayerHand.PAPER,
+    PlayerHand.PAPER+OpponentHand.SCISSORS: PlayerHand.SCISSORS,
+    PlayerHand.SCISSORS+OpponentHand.ROCK: PlayerHand.PAPER,
+    PlayerHand.SCISSORS+OpponentHand.PAPER: PlayerHand.SCISSORS,
+    PlayerHand.SCISSORS+OpponentHand.SCISSORS: PlayerHand.ROCK
+}
 
 class Hand:
     def __init__(self, rock=None, paper=None, scissors=None):
@@ -64,7 +76,6 @@ class GameRound:
         self.throw()
     
 class Game:
-    
     def __init__(self, strategy_guide=None, player_hand=None, opponent_hand=None):
         self.strategy_guide = strategy_guide
         self.player_hand = player_hand
@@ -72,11 +83,28 @@ class Game:
     
     @property
     def perfect_score(self):
-        perfect_score = 0
+        score = 0
         for game_round in self.strategy_guide:
             opponent_throw, player_throw = game_round
-            perfect_score += SCORE_MAP[player_throw] + SCORE_MAP[f'{opponent_throw}{player_throw}']
-        return perfect_score
+            score += SCORE_MAP[player_throw] + SCORE_MAP[f'{opponent_throw}{player_throw}']
+        return score
+    
+    @property
+    def choreographed_score(self):
+        score = 0
+        for game_round in self.strategy_guide:
+            opponent_throw, signal = game_round
+            player_throw = self.get_player_shape_from_signal(signal=signal, opponent_throw=opponent_throw)
+            score += SCORE_MAP[player_throw] + SCORE_MAP[f'{opponent_throw}{player_throw}']
+        return score
+            
+
+    def get_player_shape_from_signal(self, signal=None, opponent_throw=None):
+        if signal is None or opponent_throw is None:
+            print('broken')
+            return None
+        return PLAYER_SIGNAL_MAP[f'{signal}{opponent_throw}']
+
 
 def parse_input(filepath):
     # 'A Z' -> 'AZ'
@@ -97,3 +125,5 @@ game = Game(strategy_guide=strategy_guide, player_hand=player_hand, opponent_han
 # solution 1: What would your total score be if everything goes exactly according to your strategy guide?
 # attempt 1: 10290, too low
 run_star_test(game.perfect_score, 12855)
+# solution 2: Following the Elf's instructions for the second column, what would your total score be if everything goes exactly according to your strategy guide?
+run_star_test(game.choreographed_score, 13726) # first try 🙌
