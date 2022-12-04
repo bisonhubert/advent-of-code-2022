@@ -34,13 +34,33 @@ def get_enclosed_count(section_assignments):
             enclosed_count += 1
     return enclosed_count
 
+def get_overlap_count(section_assignments):
+     # Any overlap between the two pairs
+     # Example 1: 5-7,7-9 overlaps in a single section, 7
+     # Example 2: 2-8,3-7 overlaps all of the sections 3 through 7
+    overlap_count = 0
+    for section_assignment in section_assignments:
+        assignment_1, assignment_2 = section_assignment.split(',')
+        assignment_1_start, assignment_1_end = assignment_1.split('-')
+        assignment_2_start, assignment_2_end = assignment_2.split('-')
+        # print('assignment_1', assignment_1)
+        # print('assignment_2', assignment_2)
+        if (
+                (int(assignment_1_start) >= int(assignment_2_start) and int(assignment_1_start) <= int(assignment_2_end)) or
+                (int(assignment_2_start) >= int(assignment_1_start) and int(assignment_2_start) <= int(assignment_1_end))
+            ):
+            # import pdb;pdb.set_trace()
+            overlap_count += 1
+    return overlap_count
+
 # Code goes here
 section_assignments = get_input()
 enclosed_count = get_enclosed_count(section_assignments)
+overlap_count = get_overlap_count(section_assignments)
 
 # Stdout here
 print('--')
-print('enclosed_count', enclosed_count)
+print('overlap_count', overlap_count)
 
 # Tests
 # describe unit test
@@ -48,3 +68,5 @@ print('enclosed_count', enclosed_count)
 # solution 1: In how many assignment pairs does one range fully contain the other?
 # attempt 1: 278, too low
 run_star_test(enclosed_count, 542)
+# solution 2: In how many assignment pairs do the ranges overlap?
+run_star_test(overlap_count, 900)
