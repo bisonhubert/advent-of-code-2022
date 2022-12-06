@@ -25,6 +25,18 @@ def format_stacks(stack):
     print('hi')
     return formatted_stack
 
+def mock_input():
+    return [
+        'N*Q**N***',
+        'R*FQ*GM**',
+        'J*ZT*RHJ*',
+        'THGR*BNT*',
+        'ZJJGFZSM*',
+        'BNNNQWLQS',
+        'DSRVTCCNG',
+        'FRCFLQFDP'
+    ]
+
 def parse_input(filepath):
     f = open(filepath)
     readlines = f.readlines()
@@ -40,7 +52,7 @@ def get_input():
 
 # Code goes here
 stacks, procedure = get_input()
-import pdb;pdb.set_trace()
+# import pdb;pdb.set_trace()
 
 # Stdout here
 # print('--')
@@ -49,9 +61,24 @@ import pdb;pdb.set_trace()
 
 # Tests
 # describe unit test
-output_1 = format_stacks(stacks[0])
-import pdb;pdb.set_trace()
-run_unit_test(output_1, 'N*Q**N***')
+mock_input = mock_input()
+run_unit_test(len(mock_input[0]), 9)
+run_unit_test(len(mock_input[1]), 9)
+run_unit_test(len(mock_input[2]), 9)
+run_unit_test(len(mock_input[3]), 9)
+run_unit_test(len(mock_input[4]), 9)
+run_unit_test(len(mock_input[5]), 9)
+run_unit_test(len(mock_input[6]), 9)
+run_unit_test(len(mock_input[7]), 9)
+run_unit_test(mock_input[0], 'N*Q**N***')
+run_unit_test(mock_input[1], 'R*FQ*GM**')
+run_unit_test(mock_input[2], 'J*ZT*RHJ*')
+run_unit_test(mock_input[3], 'THGR*BNT*')
+run_unit_test(mock_input[4], 'ZJJGFZSM*')
+run_unit_test(mock_input[5], 'BNNNQWLQS')
+run_unit_test(mock_input[6], 'DSRVTCCNG')
+run_unit_test(mock_input[7], 'FRCFLQFDP')
+
 # run_unit_test(top_crates_test_output, 'NHQQFNMJS')
 # solution x: <prompt-from-website>
 # run_star_test(1, 0)
