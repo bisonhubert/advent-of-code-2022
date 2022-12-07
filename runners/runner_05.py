@@ -41,7 +41,15 @@ def get_supplies(readlines):
     return supplies
 
 def get_procedure(readlines):
-    return [None]
+    procedure = []
+    has_procedure_started = False
+    for line in readlines:
+        if has_procedure_started:
+            crate_count, move_from, move_to = line.strip().replace('move ', '').replace(' from ', ' ').replace(' to ', ' ').split(' ')
+            procedure.append({'crate_count': int(crate_count), 'move_from': int(move_from), 'move_to': int(move_to)})
+        if line == '\n':
+            has_procedure_started = True
+    return procedure
 
 def parse_input(filepath):
     f = open(filepath)
@@ -73,7 +81,11 @@ run_unit_test(supplies[4], ['T', 'H', 'G', 'R', None, 'B', 'N', 'T', None])
 run_unit_test(supplies[5], ['J', None, 'Z', 'T', None, 'R', 'H', 'J', None])
 run_unit_test(supplies[6], ['R', None, 'F', 'Q', None, 'G', 'M', None, None])
 run_unit_test(supplies[7], ['N', None, 'Q', None, None, 'N', None, None, None])
-# run_unit_test(procedure[0], {'num_crates': 3, 'move_from': 9, 'move_to': 4})
+run_unit_test(procedure[0], {'crate_count': 3, 'move_from': 9, 'move_to': 4})
+run_unit_test(procedure[1], {'crate_count': 2, 'move_from': 5, 'move_to': 2})
+run_unit_test(procedure[-1], {'crate_count': 3, 'move_from': 6, 'move_to': 9})
+
+
 # after transposing the supplies into stacks
 # run_unit_test(stacks[0], ['F', 'D', 'B', 'Z', 'T', 'J', 'R', 'N'])
 # run_unit_test(supplies[1], ['R', 'S', 'N', 'J', 'H', None, None, None])
