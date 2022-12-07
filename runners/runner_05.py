@@ -83,7 +83,7 @@ run_unit_test(procedure[1], {'crate_count': 2, 'move_from': 5, 'move_to': 2})
 run_unit_test(procedure[-1], {'crate_count': 3, 'move_from': 6, 'move_to': 9})
 
 # test get_stacks()
-# run_unit_test(stacks)
+run_unit_test(stacks, [['F', 'D', 'B', 'Z', 'T', 'J', 'R', 'N'],['R', 'S', 'N', 'J', 'H', None, None, None],['C', 'R', 'N', 'J', 'G', 'Z', 'F', 'Q'],['F', 'V', 'N', 'G', 'R', 'T', 'Q', None],['L', 'T', 'Q', 'F', None, None, None, None],['Q', 'C', 'W', 'Z', 'B', 'R', 'G', 'N'],['F', 'C', 'L', 'S', 'N', 'H', 'M', None],['D', 'N', 'Q', 'M', 'T', 'J', None, None],['P', 'G', 'S', None, None, None, None, None]])
 
 # after transposing the supplies into stacks
 # run_unit_test(stacks[0], ['F', 'D', 'B', 'Z', 'T', 'J', 'R', 'N'])
