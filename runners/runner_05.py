@@ -48,7 +48,7 @@ def get_procedure(readlines):
     for line in readlines:
         if has_procedure_started:
             crate_count, move_from, move_to = line.strip().replace('move ', '').replace(' from ', ' ').replace(' to ', ' ').split(' ')
-            procedure.append({'crate_count': int(crate_count), 'move_from': int(move_from), 'move_to': int(move_to)})
+            procedure.append({'crate_count': int(crate_count), 'move_from': int(move_from) - 1, 'move_to': int(move_to) - 1})
         if line == '\n':
             has_procedure_started = True
     return procedure
@@ -73,26 +73,38 @@ def get_input():
     return parse_input(INPUT_FILEPATH)
 
 def process_instruction(stacks, crate_count, move_from, move_to):
-    import pdb;pdb.set_trace()
-    crates_to_move = stacks[move_from]
+    crates_to_move = stacks[move_from][-crate_count:]
+    crates_to_move.reverse()
+    stacks[move_to] = stacks[move_to] + crates_to_move
+    stacks[move_from] = stacks[move_from][:-crate_count]
     return stacks
 
 def move_stacks(stacks, procedure):
     for instruction in procedure:
         crate_count, move_from, move_to = itemgetter('crate_count', 'move_from', 'move_to')(instruction)
         process_instruction(stacks, crate_count, move_from, move_to)
-    import pdb;pdb.set_trace()
     return stacks
+
+def get_top_crates(stacks):
+    return [stack[-1] for stack in stacks if len(stack) > 0]
+
+def get_top_crates_as_str(stacks):
+    return ''.join(get_top_crates(stacks))
+
+# Code sample from challenge
+test_stacks = [['Z', 'N'], ['M', 'C', 'D'], ['P']]
+test_stacks_copy = test_stacks.copy()
+test_procedure = get_procedure(['\n', 'move 1 from 2 to 1', 'move 3 from 1 to 3', 'move 2 from 2 to 1', 'move 1 from 1 to 2'])
+test_new_stacks = move_stacks(test_stacks_copy, test_procedure)
+test_top_crates = get_top_crates_as_str(test_new_stacks)
+run_unit_test(test_top_crates, 'CMZ')
 
 # Code goes here
 supplies, procedure = get_input()
 stacks = get_stacks(supplies)
-# new_stacks = move_stacks(stacks, procedure)
-# print('new_stacks', new_stacks)
-# import pdb;pdb.set_trace()
-
-# Stdout here
-print('--')
+copied_stacks = stacks.copy()
+new_stacks = move_stacks(copied_stacks, procedure)
+top_crates = get_top_crates_as_str(new_stacks)
 
 # Tests
 # test get_input()
@@ -108,9 +120,9 @@ run_unit_test(supplies, [
         ['N', None, 'Q', None, None, 'N', None, None, None]
     ]
 )
-run_unit_test(procedure[0], {'crate_count': 3, 'move_from': 9, 'move_to': 4})
-run_unit_test(procedure[1], {'crate_count': 2, 'move_from': 5, 'move_to': 2})
-run_unit_test(procedure[-1], {'crate_count': 3, 'move_from': 6, 'move_to': 9})
+run_unit_test(procedure[0], {'crate_count': 3, 'move_from': 8, 'move_to': 3})
+run_unit_test(procedure[1], {'crate_count': 2, 'move_from': 4, 'move_to': 1})
+run_unit_test(procedure[-1], {'crate_count': 3, 'move_from': 5, 'move_to': 8})
 
 # test get_stacks()
 run_unit_test(stacks, [
@@ -133,4 +145,7 @@ run_unit_test(stacks, [
 # import pdb;pdb.set_trace()
 
 # solution x: <prompt-from-website>
-# run_star_test(1, 0)
+# attempt 1: NHQQFNMJS (ran against the wrong stack)
+# attempt 2: FGFRZQMQS (pulling off the whole list of crates and placing it back on the other stack in the same order)
+# attempt 3: LRFFGZQCT (pulling off the whole list of crates and placing it back on the other stack in reverse order)
+run_star_test(top_crates, 'QNNTGTPFN')
