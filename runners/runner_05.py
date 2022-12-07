@@ -72,17 +72,31 @@ def get_input():
     INPUT_FILEPATH = get_input_filepath(current_filename)
     return parse_input(INPUT_FILEPATH)
 
-def process_instruction(stacks, crate_count, move_from, move_to):
+def process_instruction_9000(stacks, crate_count, move_from, move_to):
     crates_to_move = stacks[move_from][-crate_count:]
     crates_to_move.reverse()
     stacks[move_to] = stacks[move_to] + crates_to_move
     stacks[move_from] = stacks[move_from][:-crate_count]
     return stacks
 
-def move_stacks(stacks, procedure):
+def process_instruction_9001(stacks, crate_count, move_from, move_to):
+    crates_to_move = stacks[move_from][-crate_count:]
+    stacks[move_to] = stacks[move_to] + crates_to_move
+    stacks[move_from] = stacks[move_from][:-crate_count]
+    return stacks
+
+def move_stacks_with_9000(stacks, procedure):
+    stacks = stacks.copy()
     for instruction in procedure:
         crate_count, move_from, move_to = itemgetter('crate_count', 'move_from', 'move_to')(instruction)
-        process_instruction(stacks, crate_count, move_from, move_to)
+        process_instruction_9000(stacks, crate_count, move_from, move_to)
+    return stacks
+
+def move_stacks_with_9001(stacks, procedure):
+    stacks = stacks.copy()
+    for instruction in procedure:
+        crate_count, move_from, move_to = itemgetter('crate_count', 'move_from', 'move_to')(instruction)
+        process_instruction_9001(stacks, crate_count, move_from, move_to)
     return stacks
 
 def get_top_crates(stacks):
@@ -93,18 +107,23 @@ def get_top_crates_as_str(stacks):
 
 # Code sample from challenge
 test_stacks = [['Z', 'N'], ['M', 'C', 'D'], ['P']]
-test_stacks_copy = test_stacks.copy()
 test_procedure = get_procedure(['\n', 'move 1 from 2 to 1', 'move 3 from 1 to 3', 'move 2 from 2 to 1', 'move 1 from 1 to 2'])
-test_new_stacks = move_stacks(test_stacks_copy, test_procedure)
+
+test_new_stacks = move_stacks_with_9000(test_stacks, test_procedure)
 test_top_crates = get_top_crates_as_str(test_new_stacks)
 run_unit_test(test_top_crates, 'CMZ')
+
+test_new_stacks = move_stacks_with_9001(test_stacks, test_procedure)
+test_top_crates = get_top_crates_as_str(test_new_stacks)
+run_unit_test(test_top_crates, 'MCD')
 
 # Code goes here
 supplies, procedure = get_input()
 stacks = get_stacks(supplies)
-copied_stacks = stacks.copy()
-new_stacks = move_stacks(copied_stacks, procedure)
-top_crates = get_top_crates_as_str(new_stacks)
+new_stacks = move_stacks_with_9000(stacks, procedure)
+top_crates_with_9000 = get_top_crates_as_str(new_stacks)
+new_stacks = move_stacks_with_9001(stacks, procedure)
+top_crates_with_9001 = get_top_crates_as_str(new_stacks)
 
 # Tests
 # test get_input()
@@ -148,4 +167,7 @@ run_unit_test(stacks, [
 # attempt 1: NHQQFNMJS (ran against the wrong stack)
 # attempt 2: FGFRZQMQS (pulling off the whole list of crates and placing it back on the other stack in the same order)
 # attempt 3: LRFFGZQCT (pulling off the whole list of crates and placing it back on the other stack in reverse order)
-run_star_test(top_crates, 'QNNTGTPFN')
+run_star_test(top_crates_with_9000, 'QNNTGTPFN')
+
+# solution 2: After the rearrangement procedure completes, what crate ends up on top of each stack?
+run_star_test(top_crates_with_9001, 'GGNPJBTTR')
