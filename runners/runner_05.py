@@ -144,7 +144,7 @@ run_unit_test(stacks, [
 # run_unit_test(procedure[1], {'num_crates': 2, 'move_from': 5, 'move_to': 2})
 # import pdb;pdb.set_trace()
 
-# solution x: <prompt-from-website>
+# solution 1: After the rearrangement procedure completes, what crate ends up on top of each stack?
 # attempt 1: NHQQFNMJS (ran against the wrong stack)
 # attempt 2: FGFRZQMQS (pulling off the whole list of crates and placing it back on the other stack in the same order)
 # attempt 3: LRFFGZQCT (pulling off the whole list of crates and placing it back on the other stack in reverse order)
