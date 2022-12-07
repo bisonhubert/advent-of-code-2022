@@ -1,4 +1,5 @@
 import itertools
+from operator import itemgetter
 import os
 import sys
 
@@ -53,7 +54,11 @@ def get_procedure(readlines):
     return procedure
 
 def get_stacks(supplies):
-    return list(map(list, itertools.zip_longest(*supplies, fillvalue=None)))
+    stacks = list(map(list, itertools.zip_longest(*supplies, fillvalue=None)))
+    return [
+        list(filter(lambda x: x is not None, stack))
+        for stack in stacks
+    ]
 
 def parse_input(filepath):
     f = open(filepath)
@@ -67,9 +72,24 @@ def get_input():
     INPUT_FILEPATH = get_input_filepath(current_filename)
     return parse_input(INPUT_FILEPATH)
 
+def process_instruction(stacks, crate_count, move_from, move_to):
+    import pdb;pdb.set_trace()
+    crates_to_move = stacks[move_from]
+    return stacks
+
+def move_stacks(stacks, procedure):
+    for instruction in procedure:
+        crate_count, move_from, move_to = itemgetter('crate_count', 'move_from', 'move_to')(instruction)
+        process_instruction(stacks, crate_count, move_from, move_to)
+    import pdb;pdb.set_trace()
+    return stacks
+
 # Code goes here
 supplies, procedure = get_input()
 stacks = get_stacks(supplies)
+# new_stacks = move_stacks(stacks, procedure)
+# print('new_stacks', new_stacks)
+# import pdb;pdb.set_trace()
 
 # Stdout here
 print('--')
@@ -95,14 +115,14 @@ run_unit_test(procedure[-1], {'crate_count': 3, 'move_from': 6, 'move_to': 9})
 # test get_stacks()
 run_unit_test(stacks, [
         ['F', 'D', 'B', 'Z', 'T', 'J', 'R', 'N'],
-        ['R', 'S', 'N', 'J', 'H', None, None, None],
+        ['R', 'S', 'N', 'J', 'H'],
         ['C', 'R', 'N', 'J', 'G', 'Z', 'F', 'Q'],
-        ['F', 'V', 'N', 'G', 'R', 'T', 'Q', None],
-        ['L', 'T', 'Q', 'F', None, None, None, None],
+        ['F', 'V', 'N', 'G', 'R', 'T', 'Q'],
+        ['L', 'T', 'Q', 'F'],
         ['Q', 'C', 'W', 'Z', 'B', 'R', 'G', 'N'],
-        ['F', 'C', 'L', 'S', 'N', 'H', 'M', None],
-        ['D', 'N', 'Q', 'M', 'T', 'J', None, None],
-        ['P', 'G', 'S', None, None, None, None, None]
+        ['F', 'C', 'L', 'S', 'N', 'H', 'M'],
+        ['D', 'N', 'Q', 'M', 'T', 'J'],
+        ['P', 'G', 'S']
     ]
 )
 
