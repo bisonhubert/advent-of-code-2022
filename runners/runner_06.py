@@ -20,35 +20,49 @@ def get_input():
 def is_marker(subset):
     return len(subset) == len(set(subset))
 
-def get_start_of_packet_marker(signal):
+def get_start_of_packet_marker(signal, distinct_chars=4):
     substr = ''
     marker = None
     for indx, char in enumerate(signal):
         substr += char
-        if len(substr) == 4:
+        if len(substr) == distinct_chars:
             if is_marker(substr):
                 marker = indx + 1
                 break
             substr = substr[1:]
-        # import pdb;pdb.set_trace()
     return marker
 
 # Code goes here
-test_input = 'mjqjpqmgbljsphdztnvjfqwrcgsmlb'
-test_marker = get_start_of_packet_marker(test_input)
+test_input_1 = 'mjqjpqmgbljsphdztnvjfqwrcgsmlb'
+test_input_2 = 'bvwbjplbgvbhsrlpgdmjqwftvncz'
+test_input_3 = 'nppdvjthqldpwncqszvftbrmjlhg'
+test_input_4 = 'nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg'
+test_input_5 = 'zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw'
+test_marker_disctinct_4 = get_start_of_packet_marker(test_input_1)
+test_marker_disctinct_14_1 = get_start_of_packet_marker(test_input_1, distinct_chars=14)
+test_marker_disctinct_14_2 = get_start_of_packet_marker(test_input_2, distinct_chars=14)
+test_marker_disctinct_14_3 = get_start_of_packet_marker(test_input_3, distinct_chars=14)
+test_marker_disctinct_14_4 = get_start_of_packet_marker(test_input_4, distinct_chars=14)
+test_marker_disctinct_14_5 = get_start_of_packet_marker(test_input_5, distinct_chars=14)
 
 input = get_input()
-marker = get_start_of_packet_marker(input)
-print('marker', marker)
-
-
+marker_1 = get_start_of_packet_marker(input)
+marker_2 = get_start_of_packet_marker(input, distinct_chars=14)
 
 # Stdout here
 print('--')
 
 # Tests
-# prompt example
-run_unit_test(test_marker, 7)
+# prompt examples
+run_unit_test(test_marker_disctinct_4, 7)
+run_unit_test(test_marker_disctinct_14_1, 19)
+run_unit_test(test_marker_disctinct_14_2, 23)
+run_unit_test(test_marker_disctinct_14_3, 23)
+run_unit_test(test_marker_disctinct_14_4, 29)
+run_unit_test(test_marker_disctinct_14_5, 26)
 
 # solution 1: How many characters need to be processed before the first start-of-packet marker is detected?
-run_star_test(marker, 1855)
+run_star_test(marker_1, 1855)
+
+# solution 2: How many characters need to be processed before the first start-of-message marker is detected?
+run_star_test(marker_2, 3256)
