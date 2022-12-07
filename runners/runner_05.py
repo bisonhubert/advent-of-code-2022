@@ -1,5 +1,3 @@
-from itertools import groupby
-
 import os
 import sys
 
@@ -9,115 +7,93 @@ def get_input_filepath(filename):
     day = filename.split('/')[-1].split('_')[-1].split('.')[0]
     return f'./inputs/input_{day}.txt'
 
-def format_stacks(stack):
-    formatted_stack = ''
-    crate_top = 0
-    for i in list(range(len(stack))):
-        if (i + 1) % 4 == 0:
-            crate = stack[crate_top:i+1]
-            if '[' in crate and ']' in crate:
-                formatted_stack += crate.replace('[', '').replace(']', '').replace(' ', '')
-                crate_top += i + 1
-            else:
-                formatted_stack += '*'
-            print('crate', crate)
-            print('formatted_stack', formatted_stack)
-    print('hi')
-    return formatted_stack
+def get_supplies(readlines):
+    supplies = []
+    supply_rows = []
+    for row in readlines:
+        if row == '\n':
+            break
+        supply_rows.append(row)
+    supply_rows = supply_rows[:-1]
+    supply_rows.reverse()
+    for indx, row in enumerate(supply_rows):
+        # print('row', row)
+        supply_row = [crate.strip().replace('[', '').replace(']', '') for crate in row.split(' ')]
+        if len(supply_row) == 9:
+            supplies.append(supply_row)
+            # print('adding supply row', supply_row)
+            # print('supplies', supplies)
+        else:
+            while '' in supply_row:
+                if indx == 6:
+                    print('supply_row', supply_row)
+                first_space = supply_row.index('')
+                remaining_spaces = supply_row[first_space:][:-1]
+                supply_row = supply_row[:first_space]
+                # if indx == 6:
+                #     import pdb;pdb.set_trace()
+                if len(set(remaining_spaces)) == 1:
+                    num_remaining_spaces = len(remaining_spaces) // 3 or 1
+                    supply_row = supply_row + [None for i in list(range(num_remaining_spaces))]
+                    # import pdb;pdb.set_trace()
+                else:
+                    remaining_spaces = remaining_spaces[1:]
+                    # if indx == 6:
+                    #     import pdb;pdb.set_trace()
+                    if '' in remaining_spaces:
+                        supply_row.append(None)
+                        remaining_spaces = remaining_spaces[3:]
+                        supply_row += remaining_spaces
+                        # if indx == 6:
+                        #     import pdb;pdb.set_trace()
+            if len(supply_row) != 9:
+                missing_crates = 9 - len(supply_row)
+                # import pdb;pdb.set_trace()
+                supply_row = supply_row + [None for i in list(range(missing_crates))]
+            # print('adding supply row', supply_row)
+            supplies.append(supply_row)
+    # import pdb;pdb.set_trace()
+    return supplies
 
-def mock_input():
-    return [
-        'N*Q**N***',
-        'R*FQ*GM**',
-        'J*ZT*RHJ*',
-        'THGR*BNT*',
-        'ZJJGFZSM*',
-        'BNNNQWLQS',
-        'DSRVTCCNG',
-        'FRCFLQFDP'
-    ]
+def get_procedure(readlines):
+    return [None]
 
 def parse_input(filepath):
     f = open(filepath)
     readlines = f.readlines()
-    stacks = readlines[:readlines.index('\n')]
-    # stacks = format_stacks(readlines[:readlines.index('\n')])
-    procedure = [readline.strip() for readline in readlines[readlines.index('\n')+1:]]
-    return stacks, procedure
+    supplies = get_supplies(readlines)
+    procedure = get_procedure(readlines)
+    return supplies, procedure
 
 def get_input():
     current_filename = os.path.abspath(sys.argv[0])
     INPUT_FILEPATH = get_input_filepath(current_filename)
     return parse_input(INPUT_FILEPATH)
 
-def get_top_crates(crates):
-    top_crates = ['*' for i in list(range(len(crates)))]
-    for indx, crate in enumerate(crates):
-        top_crates[indx] = list(filter(lambda x: x != '*', crate))[0]
-    return top_crates
-
-def run(stacks, procedure):
-    # move 3 from 9 to 4
-    # ie: get 3 from stack 9
-    # ie: move on top of stack 4
-    for instruction in procedure:
-        num_crates_to_move, move_from, move_to = instruction.replace('move ', '').replace('from ', '').replace('to ', '').split(' ')
-        instruction = {'num_crates_to_move': int(num_crates_to_move), 'move_from': int(move_from), 'move_to': int(move_to)}
-        
-        move_to = instruction.get('move_to')
-        move_from = instruction.get('move_from')
-        num_crates_to_move = instruction.get('num_crates_to_move')
-        # import pdb;pdb.set_trace()
-        slice_from = 9 - num_crates_to_move
-        empty_spaces = '*'
-        import pdb;pdb.set_trace()
-        stacks[move_to][:slice_from] = stacks[move_from][:slice_from]
-        for i in list(range(9)):
-            if i >= slice_from:
-                stacks[move_from][i] = '*'
-        import pdb;pdb.set_trace()
-    import pdb;pdb.set_trace()
-
-
 # Code goes here
-stacks, procedure = get_input()
-mock_input = mock_input()
-
-from itertools import zip_longest
-list_of_lists = mock_input
-tranposed_tuples = zip_longest(*list_of_lists, fillvalue=None)
-transposed_tuples_list = list(tranposed_tuples)
-# import pdb;pdb.set_trace()
-top_crates = get_top_crates(transposed_tuples_list)
-top_crates_after_procedure = run(transposed_tuples_list, procedure)
+supplies, procedure = get_input()
+# stacks = get_stacks(supplies)
 
 # Stdout here
-# print('--')
-# print('stacks', stacks)
-# print('procedure', procedure)
+print('--')
 
 # Tests
-# test mock crates
-run_unit_test(len(mock_input[0]), 9)
-run_unit_test(len(mock_input[1]), 9)
-run_unit_test(len(mock_input[2]), 9)
-run_unit_test(len(mock_input[3]), 9)
-run_unit_test(len(mock_input[4]), 9)
-run_unit_test(len(mock_input[5]), 9)
-run_unit_test(len(mock_input[6]), 9)
-run_unit_test(len(mock_input[7]), 9)
-run_unit_test(mock_input[0], 'N*Q**N***')
-run_unit_test(mock_input[1], 'R*FQ*GM**')
-run_unit_test(mock_input[2], 'J*ZT*RHJ*')
-run_unit_test(mock_input[3], 'THGR*BNT*')
-run_unit_test(mock_input[4], 'ZJJGFZSM*')
-run_unit_test(mock_input[5], 'BNNNQWLQS')
-run_unit_test(mock_input[6], 'DSRVTCCNG')
-run_unit_test(mock_input[7], 'FRCFLQFDP')
+# test get_input()
+run_unit_test(len(supplies), 8)
+run_unit_test(supplies[0], ['F', 'R', 'C', 'F', 'L', 'Q', 'F', 'D', 'P'])
+run_unit_test(supplies[1], ['D', 'S', 'R', 'V', 'T', 'C', 'C', 'N', 'G'])
+run_unit_test(supplies[2], ['B', 'N', 'N', 'N', 'Q', 'W', 'L', 'Q', 'S'])
+run_unit_test(supplies[3], ['Z', 'J', 'J', 'G', 'F', 'Z', 'S', 'M', None])
+run_unit_test(supplies[4], ['T', 'H', 'G', 'R', None, 'B', 'N', 'T', None])
+run_unit_test(supplies[5], ['J', None, 'Z', 'T', None, 'R', 'H', 'J', None])
+run_unit_test(supplies[6], ['R', None, 'F', 'Q', None, 'G', 'M', None, None])
+run_unit_test(supplies[7], ['N', None, 'Q', None, None, 'N', None, None, None])
+# run_unit_test(procedure[0], {'num_crates': 3, 'move_from': 9, 'move_to': 4})
+# after transposing the supplies into stacks
+# run_unit_test(stacks[0], ['F', 'D', 'B', 'Z', 'T', 'J', 'R', 'N'])
+# run_unit_test(supplies[1], ['R', 'S', 'N', 'J', 'H', None, None, None])
+# run_unit_test(procedure[1], {'num_crates': 2, 'move_from': 5, 'move_to': 2})
+# import pdb;pdb.set_trace()
 
-# test top crates
-run_unit_test(''.join(top_crates), 'NHQQFNMJS')
-
-# run_unit_test(top_crates_test_output, 'NHQQFNMJS')
 # solution x: <prompt-from-website>
 # run_star_test(1, 0)
