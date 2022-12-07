@@ -17,42 +17,27 @@ def get_supplies(readlines):
     supply_rows = supply_rows[:-1]
     supply_rows.reverse()
     for indx, row in enumerate(supply_rows):
-        # print('row', row)
         supply_row = [crate.strip().replace('[', '').replace(']', '') for crate in row.split(' ')]
         if len(supply_row) == 9:
             supplies.append(supply_row)
-            # print('adding supply row', supply_row)
-            # print('supplies', supplies)
         else:
             while '' in supply_row:
-                if indx == 6:
-                    print('supply_row', supply_row)
                 first_space = supply_row.index('')
                 remaining_spaces = supply_row[first_space:][:-1]
                 supply_row = supply_row[:first_space]
-                # if indx == 6:
-                #     import pdb;pdb.set_trace()
                 if len(set(remaining_spaces)) == 1:
                     num_remaining_spaces = len(remaining_spaces) // 3 or 1
                     supply_row = supply_row + [None for i in list(range(num_remaining_spaces))]
-                    # import pdb;pdb.set_trace()
                 else:
                     remaining_spaces = remaining_spaces[1:]
-                    # if indx == 6:
-                    #     import pdb;pdb.set_trace()
                     if '' in remaining_spaces:
                         supply_row.append(None)
                         remaining_spaces = remaining_spaces[3:]
                         supply_row += remaining_spaces
-                        # if indx == 6:
-                        #     import pdb;pdb.set_trace()
             if len(supply_row) != 9:
                 missing_crates = 9 - len(supply_row)
-                # import pdb;pdb.set_trace()
                 supply_row = supply_row + [None for i in list(range(missing_crates))]
-            # print('adding supply row', supply_row)
             supplies.append(supply_row)
-    # import pdb;pdb.set_trace()
     return supplies
 
 def get_procedure(readlines):
