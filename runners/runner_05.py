@@ -77,13 +77,34 @@ print('--')
 # Tests
 # test get_input()
 run_unit_test(len(supplies), 8)
-run_unit_test(supplies, [['F', 'R', 'C', 'F', 'L', 'Q', 'F', 'D', 'P'],['D', 'S', 'R', 'V', 'T', 'C', 'C', 'N', 'G'],['B', 'N', 'N', 'N', 'Q', 'W', 'L', 'Q', 'S'],['Z', 'J', 'J', 'G', 'F', 'Z', 'S', 'M', None],['T', 'H', 'G', 'R', None, 'B', 'N', 'T', None],['J', None, 'Z', 'T', None, 'R', 'H', 'J', None],['R', None, 'F', 'Q', None, 'G', 'M', None, None],['N', None, 'Q', None, None, 'N', None, None, None]])
+run_unit_test(supplies, [
+        ['F', 'R', 'C', 'F', 'L', 'Q', 'F', 'D', 'P'],
+        ['D', 'S', 'R', 'V', 'T', 'C', 'C', 'N', 'G'],
+        ['B', 'N', 'N', 'N', 'Q', 'W', 'L', 'Q', 'S'],
+        ['Z', 'J', 'J', 'G', 'F', 'Z', 'S', 'M', None],
+        ['T', 'H', 'G', 'R', None, 'B', 'N', 'T', None],
+        ['J', None, 'Z', 'T', None, 'R', 'H', 'J', None],
+        ['R', None, 'F', 'Q', None, 'G', 'M', None, None],
+        ['N', None, 'Q', None, None, 'N', None, None, None]
+    ]
+)
 run_unit_test(procedure[0], {'crate_count': 3, 'move_from': 9, 'move_to': 4})
 run_unit_test(procedure[1], {'crate_count': 2, 'move_from': 5, 'move_to': 2})
 run_unit_test(procedure[-1], {'crate_count': 3, 'move_from': 6, 'move_to': 9})
 
 # test get_stacks()
-run_unit_test(stacks, [['F', 'D', 'B', 'Z', 'T', 'J', 'R', 'N'],['R', 'S', 'N', 'J', 'H', None, None, None],['C', 'R', 'N', 'J', 'G', 'Z', 'F', 'Q'],['F', 'V', 'N', 'G', 'R', 'T', 'Q', None],['L', 'T', 'Q', 'F', None, None, None, None],['Q', 'C', 'W', 'Z', 'B', 'R', 'G', 'N'],['F', 'C', 'L', 'S', 'N', 'H', 'M', None],['D', 'N', 'Q', 'M', 'T', 'J', None, None],['P', 'G', 'S', None, None, None, None, None]])
+run_unit_test(stacks, [
+        ['F', 'D', 'B', 'Z', 'T', 'J', 'R', 'N'],
+        ['R', 'S', 'N', 'J', 'H', None, None, None],
+        ['C', 'R', 'N', 'J', 'G', 'Z', 'F', 'Q'],
+        ['F', 'V', 'N', 'G', 'R', 'T', 'Q', None],
+        ['L', 'T', 'Q', 'F', None, None, None, None],
+        ['Q', 'C', 'W', 'Z', 'B', 'R', 'G', 'N'],
+        ['F', 'C', 'L', 'S', 'N', 'H', 'M', None],
+        ['D', 'N', 'Q', 'M', 'T', 'J', None, None],
+        ['P', 'G', 'S', None, None, None, None, None]
+    ]
+)
 
 # after transposing the supplies into stacks
 # run_unit_test(stacks[0], ['F', 'D', 'B', 'Z', 'T', 'J', 'R', 'N'])
